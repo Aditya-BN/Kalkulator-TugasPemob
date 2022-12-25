@@ -39,7 +39,7 @@ const App = () => {
     let tmpOp = '';
     if (props.title == 'C') {
       setNumber(0);
-      getResult(0);
+      getResult('');
       setTmp(0);
       setOp('');
     }
