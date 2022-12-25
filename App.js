@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  TouchableHighlight,
+  StatusBar
 } from 'react-native';
 import React from 'react';
 
@@ -71,7 +71,7 @@ const App = () => {
         }
         break;
 
-      case '*':
+      case 'x':
         if (tmp == 0) {
           saveToTmp(props);
         } else {
@@ -101,7 +101,7 @@ const App = () => {
           case '-':
             getResult(tmp - number);
             break;
-          case '*':
+          case 'x':
             getResult(tmp * number);
             break;
           case '/':
@@ -109,8 +109,8 @@ const App = () => {
             break;
         }
         setOp('');
-        setTmp(0);
-        setNumber(0);
+        setTmp('');
+        setNumber('');
         break;
 
       default:
@@ -121,8 +121,9 @@ const App = () => {
 
   return (
     <View style={styles.layout}>
+      <StatusBar backgroundColor={'#65647C'}/>
       <View style={styles.numDisplay}>
-        <View>
+        <View style={styles.textNumberWrapper}>
           <Text style={styles.textNumber}>{number}</Text>
           <Text style={styles.textNumber}>{op}</Text>
           <Text style={styles.textNumber}>{result}</Text>
@@ -145,7 +146,7 @@ const App = () => {
           <Numpad title="7" num={7} />
           <Numpad title="8" num={8} />
           <Numpad title="9" num={9} />
-          <Numpad title="*" />
+          <Numpad title="x" />
         </View>
         <View style={styles.numpadRow}>
           <Numpad title="C" />
@@ -186,9 +187,15 @@ const styles = StyleSheet.create({
     height: 80,
     width: 70,
   },
+  textNumberWrapper: {
+    backgroundColor: '#8B7E74',
+    borderRadius: 20,
+    padding: 10,
+  },
   textNumber: {
     textAlign: 'right',
-    fontSize: 50
+    fontSize: 50,
+    margin: 2
   },
   TextButton: {
     color: '#ffffff',
