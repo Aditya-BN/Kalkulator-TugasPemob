@@ -1,116 +1,202 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  useColorScheme,
+  StyleSheet,
   View,
+  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
+import React from 'react';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  const [number, setNumber] = React.useState(0);
+  const [result, getResult] = React.useState(0);
+  const [tmp, setTmp] = React.useState(0);
+  const [op, setOp] = React.useState('');
 
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+  function Numpad(props) {
+    return (
+      <TouchableOpacity
+        style={styles.numpadButton}
+        onPress={() => {
+          if (props.num >= 0) {
+            return setNumber(number * 10 + props.num);
+          } else {
+            return Calculate(props);
+          }
+        }}>
+        <Text style={styles.TextButton}>{props.title}</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  function saveToTmp(props) {
+    setTmp(number);
+    setNumber(0);
+    setOp(props.title);
+  }
+
+  function Calculate(props) {
+    let tmpOp = '';
+    if (props.title == 'C') {
+      setNumber(0);
+      getResult(0);
+      setTmp(0);
+      setOp('');
+    }
+
+    if (op != '' && op != 'C' && props.title != '=') {
+      tmpOp = props.title;
+      props.title = op;
+    }
+    switch (props.title) {
+      case '+':
+        if (tmp == 0) {
+          saveToTmp(props);
+        } else {
+          getResult(tmp + number);
+          setTmp(tmp + number);
+          setOp(tmpOp);
+          setNumber(0);
+        }
+        break;
+
+      case '-':
+        if (tmp == 0) {
+          saveToTmp(props);
+        } else {
+          getResult(tmp - number);
+          setTmp(tmp - number);
+          setOp(tmpOp);
+          setNumber(0);
+        }
+        break;
+
+      case '*':
+        if (tmp == 0) {
+          saveToTmp(props);
+        } else {
+          getResult(tmp * number);
+          setTmp(tmp * number);
+          setOp(tmpOp);
+          setNumber(0);
+        }
+        break;
+
+      case '/':
+        if (tmp == 0) {
+          saveToTmp(props);
+        } else {
+          getResult(tmp / number);
+          setTmp(tmp / number);
+          setOp(tmpOp);
+          setNumber(0);
+        }
+        break;
+
+      case '=':
+        switch (op) {
+          case '+':
+            getResult(tmp + number);
+            break;
+          case '-':
+            getResult(tmp - number);
+            break;
+          case '*':
+            getResult(tmp * number);
+            break;
+          case '/':
+            getResult(tmp / number);
+            break;
+        }
+        setOp('');
+        setTmp(0);
+        setNumber(0);
+        break;
+
+      default:
+        console.log(props.title);
+        break;
+    }
+  }
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.layout}>
+      <View style={styles.numDisplay}>
+        <View>
+          <Text style={styles.textNumber}>{number}</Text>
+          <Text style={styles.textNumber}>{op}</Text>
+          <Text style={styles.textNumber}>{result}</Text>
+        </View>
+      </View>
+      <View style={styles.numpadCol}>
+        <View style={styles.numpadRow}>
+          <Numpad title="1" num={1} />
+          <Numpad title="2" num={2} />
+          <Numpad title="3" num={3} />
+          <Numpad title="+" />
+        </View>
+        <View style={styles.numpadRow}>
+          <Numpad title="4" num={4} />
+          <Numpad title="5" num={5} />
+          <Numpad title="6" num={6} />
+          <Numpad title="-" />
+        </View>
+        <View style={styles.numpadRow}>
+          <Numpad title="7" num={7} />
+          <Numpad title="8" num={8} />
+          <Numpad title="9" num={9} />
+          <Numpad title="*" />
+        </View>
+        <View style={styles.numpadRow}>
+          <Numpad title="C" />
+          <Numpad title="0" num={0} />
+          <Numpad title="=" />
+          <Numpad title="/" />
+        </View>
+      </View>
     </View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  layout: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 30,
+    backgroundColor: 'green'
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  numDisplay: {
+    height: '40%',
+    justifyContent: 'center',
+    marginBottom: 50,
+    borderRadius: 15,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  numpadCol: {
+    justifyContent: 'space-evenly',
+    backgroundColor: '#D2D2D2',
+    borderRadius: 15,
+    height: '50%',
   },
-  highlight: {
-    fontWeight: '700',
+  numpadRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  numpadButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    borderRadius: 40,
+    height: 70,
+    width: 70,
+  },
+  textNumber: {
+    textAlign: 'right',
+    fontFamily: 'sans-serif',
+    fontSize: 50
+  },
+  TextButton: {
+    color: '#ffffff',
+    fontSize: 20,
   },
 });
 
