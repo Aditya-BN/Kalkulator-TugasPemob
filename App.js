@@ -163,19 +163,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     paddingHorizontal: 30,
-    backgroundColor: 'green'
+    backgroundColor: '#65647C',
+    fontFamily: 'sans-serif',
   },
   numDisplay: {
     height: '40%',
-    justifyContent: 'center',
-    marginBottom: 50,
-    borderRadius: 15,
+    justifyContent: 'center'
   },
   numpadCol: {
     justifyContent: 'space-evenly',
-    backgroundColor: '#D2D2D2',
-    borderRadius: 15,
-    height: '50%',
+    height: '60%',
   },
   numpadRow: {
     flexDirection: 'row',
@@ -184,19 +181,18 @@ const styles = StyleSheet.create({
   numpadButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2196F3',
-    borderRadius: 40,
-    height: 70,
+    backgroundColor: '#8B7E74',
+    borderRadius: 20,
+    height: 80,
     width: 70,
   },
   textNumber: {
     textAlign: 'right',
-    fontFamily: 'sans-serif',
     fontSize: 50
   },
   TextButton: {
     color: '#ffffff',
-    fontSize: 20,
+    fontSize: 30,
   },
 });
 
